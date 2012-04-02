@@ -3,6 +3,9 @@ package mineria.datos
 import java.math.MathContext
 
 class VecinosCercanosService {
+    BigDecimal valorRegistroB
+    BigDecimal valorRegistroC
+    BigDecimal distancia
 
     def evaluarVecinosCercanos(BigDecimal valorB, BigDecimal valorC, Integer k){
         Registro.list().each { registro ->
@@ -12,9 +15,9 @@ class VecinosCercanosService {
     }
 
     def pitagoras(Registro registro, BigDecimal valorNuevoB, BigDecimal valorNuevoC){
-        BigDecimal valorRegistroB = new BigDecimal(valorNuevoB.subtract(registro.valorB)*valorNuevoB.subtract(registro.valorB)).round(new MathContext(3))
-        BigDecimal valorRegistroC = new BigDecimal(valorNuevoC.subtract(registro.valorC)*valorNuevoC.subtract(registro.valorC)).round(new MathContext(3))
-        BigDecimal distancia = new BigDecimal(Math.sqrt(valorRegistroB + valorRegistroC))
+        valorRegistroB = new BigDecimal(valorNuevoB.subtract(registro.valorB)*valorNuevoB.subtract(registro.valorB)).round(new MathContext(3))
+        valorRegistroC = new BigDecimal(valorNuevoC.subtract(registro.valorC)*valorNuevoC.subtract(registro.valorC)).round(new MathContext(3))
+        distancia = new BigDecimal(Math.sqrt(valorRegistroB + valorRegistroC))
         new VecinosCercanos(
                 clasificacion:registro.valorD,
                 distancia:distancia
@@ -26,7 +29,7 @@ class VecinosCercanosService {
         def clasificacionCorrespondiente
         VecinosCercanos.list([sort: "distancia", order: "asc"]).each { vecino ->
             if(k>0){
-                listaClasificaciones << vecino
+                listaClasificaciones << vecino.clasificacion
                 new VecinosCercanosSeleccionados(clasificacion:vecino.clasificacion)
                 k--
             }
@@ -35,7 +38,7 @@ class VecinosCercanosService {
         listaClasificaciones.each{ clasificacion ->
             if(!clasificacionCorrespondiente){
                 clasificacionCorrespondiente = clasificacion
-            }else if(VecinosCercanosSeleccionados.countByClasificacionLike(clasificacion) > VecinosCercanosSeleccionados.countByClasificacionLike(clasificacionCorrespondiente)){
+            }else if(VecinosCercanosSeleccionados.countByClasificacion(clasificacion) > VecinosCercanosSeleccionados.countByClasificacion(clasificacionCorrespondiente)){
                 clasificacionCorrespondiente = clasificacion
             }
         }

@@ -112,19 +112,29 @@ class ConfiguracionController {
     }
 
     def vecinosCercanos = {
-        def valorNuevoC  = regresionLinealService.calcularPromedioVarianzas(params.valorNuevoA, new BigDecimal(params.valorNuevoB))
-        def clasificacion = vecinosCercanosService.evaluarVecinosCercanos(new BigDecimal(params.valorNuevoB), new BigDecimal(valorNuevoC), params.valorK.toInteger())
-        def registroNuevo = new Registro(
-                valorA:params.valorNuevoA,
-                valorB:params.valorNuevoB,
-                valorC:valorNuevoC,
-                valorD:clasificacion
-        )
+        if(params.valorK){
+            def valorNuevoC  = regresionLinealService.calcularPromedioVarianzas(params.valorNuevoA, new BigDecimal(params.valorNuevoB))
+            def clasificacion = vecinosCercanosService.evaluarVecinosCercanos(new BigDecimal(params.valorNuevoB), new BigDecimal(valorNuevoC), params.valorK.toInteger())
+            def registroNuevo = new Registro(
+                    valorA:params.valorNuevoA,
+                    valorB:params.valorNuevoB,
+                    valorC:valorNuevoC,
+                    valorD:clasificacion
+            )
 
-        flash.message = "Cálculo de valores por Vecinos Cercanos"
-        clear()
-        render (view:'list',model:[registroInstanceList: Registro.list(params), registroInstanceTotal: Registro.count(),
-                configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo])
+            flash.message = "Cálculo de valores por Vecinos Cercanos"
+            clear()
+            render (view:'list',model:[registroInstanceList: Registro.list(params), registroInstanceTotal: Registro.count(),
+                    configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo, valorK:params.valorK])
+        }else{
+            flash.error = "Se debe ingresar un valor de K para calcular los vecinos cercanos"
+            def registroNuevo = new Registro(
+                    valorA:params.valorNuevoA,
+                    valorB:params.valorNuevoB
+            )
+            render (view:'list',model:[registroInstanceList: Registro.list(params), registroInstanceTotal: Registro.count(),
+                    configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo])
+        }
     }
 
     def clear(){

@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'configuracion.label', default: 'Configuracion')}"/>
-    <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <title><g:message code="configuracion.list.datos"/></title>
 </head>
 
 <body>
@@ -15,16 +15,62 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
         <li><g:link class="edit" action="edit" id="${configuracion?.id}"
-            onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Se perderá la configuración actual ¿continuar?')}');">
+                    onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Se perderá la configuración actual ¿continuar?')}');">
             <g:message code="default.button.edit.label" default="Edit"/></g:link></li>
     </ul>
 </div>
 
 <div id="list-configuracion" class="content scaffold-list" role="main">
-    <h1><g:message code="default.list.label" args="[entityName]"/></h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
+    <h1><g:message code="configuracion.list.calcular" /></h1>
+    <fieldset>
+        <g:form>
+            <fieldset class="form">
+                <g:render template="formRegistro"/>
+            </fieldset>
+            <fieldset class="buttons">
+                <g:actionSubmit name="regresionLineal" action="regresionLineal"
+                                value="Regresión Lineal"/>
+                <g:actionSubmit name="vecinosCercanos" action="vecinosCercanos"
+                                value="Vecinos Cercanos"/>
+            </fieldset>
+        </g:form>
+
+    </fieldset>
+
+    <fieldset>
+        <g:if test="${registroNuevo?.valorC}">
+            <g:if test="${flash.message}">
+                <div class="message" role="status">${flash.message}</div>
+            </g:if>
+            <b>
+                <table>
+                    <tr>
+
+                        <td>${configuracion?.columnaA}</td>
+
+                        <td>${configuracion?.columnaB}</td>
+
+                        <td>${configuracion?.columnaC}</td>
+                        <g:if test="${registroNuevo?.valorD}">
+                        <td>${configuracion?.columnaD}</td>
+                            </g:if>
+
+                    </tr>
+                        <tr>
+                            <td align="center"><font color="blue">${registroNuevo?.valorA}</font></td>
+                            <td align="center"><font color="blue">${registroNuevo?.valorB}</font></td>
+                            <td align="center"><font color="blue">${registroNuevo?.valorC}</font></td>
+                            <g:if test="${registroNuevo?.valorD}">
+                            <td align="center"><font color="blue">${registroNuevo?.valorD}</font></td>
+                                </g:if>
+                        </tr>
+                </table>
+            </b>
+        </g:if>
+    </fieldset>
+
+    <h1><g:message code="configuracion.list.datos" /></h1>
+
     <table>
         <thead>
         <tr>
@@ -60,25 +106,11 @@
         </tbody>
     </table>
 
+
     <div class="pagination">
         <g:paginate total="${registroInstanceTotal}"/>
     </div>
 
-    <fieldset><legend>Nuevo registro</legend>
-        <g:form>
-        <fieldset class="form">
-            <g:render template="formRegistro"/>
-        </fieldset>
-        <fieldset class="buttons">
-            <g:actionSubmit name="regresionLineal" action="regresionLineal"
-                            value="Regresión Lineal"/>
-            <g:actionSubmit name="vecinosCercanos" action="vecinosCercanos"
-                            value="Vecinos Cercanos"/>
-        </fieldset>
-    </g:form>
-
-
-    </fieldset>
 </div>
 </body>
 </html>

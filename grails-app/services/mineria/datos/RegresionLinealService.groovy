@@ -1,6 +1,7 @@
 package mineria.datos
 
 import mineria.datos.RegresionLineal
+import java.math.MathContext
 
 class RegresionLinealService {
     def regresionA
@@ -32,11 +33,12 @@ class RegresionLinealService {
             totalVarianzaXX += regresionLineal.varianzaXX
             totalVarianzaXY += regresionLineal.varianzaXY
         }
-
+        println "Sumatoria VarianzaX^2 $totalVarianzaXX"
+        println "Sumatoria VarianzaXY $totalVarianzaXY"
         regresionB = totalVarianzaXY / totalVarianzaXX
         regresionA = promedioValoresC - (regresionB*promedioValoresB)
         regresionY = regresionA + (regresionB*valorNuevoB)
-        return regresionY
+        return regresionY.round(new MathContext(3))
 
     }
 
@@ -46,7 +48,7 @@ class RegresionLinealService {
         def varianzaY = registro.valorC - promedioY
         regresionLineal.varianzaXX = varianzaX * varianzaX
         regresionLineal.varianzaYY = varianzaY * varianzaY
-        regresionLineal.varianzaXY = regresionLineal.varianzaXX * regresionLineal.varianzaYY
+        regresionLineal.varianzaXY = varianzaX * varianzaY
         regresionLineal.save()
     }
 

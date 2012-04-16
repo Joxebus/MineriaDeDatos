@@ -47,7 +47,6 @@ class ConfiguracionController {
             println linea
             linea = linea.split(',')
             if(i==0){
-                println "Llenando titulos"
                 new Configuracion(
                         columnaA:linea[0],
                         columnaB:linea[1],
@@ -56,7 +55,6 @@ class ConfiguracionController {
                 ).save(flush:true)
                 i++
             }else{
-                println "Creando nuevo registro"
                 new Registro(
                         valorA:linea[0],
                         valorB:linea[1],
@@ -66,7 +64,7 @@ class ConfiguracionController {
             }
 
         }
-
+        archivo.delete()
 		flash.message = message(code: 'default.created.message', args: [message(code: 'configuracion.label', default: 'Configuracion'), Configuracion.list().get(0).id])
         redirect(action: "list", params:params)
     }

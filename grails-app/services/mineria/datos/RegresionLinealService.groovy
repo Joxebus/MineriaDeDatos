@@ -1,6 +1,5 @@
 package mineria.datos
 
-import mineria.datos.RegresionLineal
 import java.math.MathContext
 
 class RegresionLinealService {

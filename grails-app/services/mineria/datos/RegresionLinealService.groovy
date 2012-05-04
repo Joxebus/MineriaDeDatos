@@ -32,8 +32,8 @@ class RegresionLinealService {
             totalVarianzaXX += regresionLineal.varianzaXX
             totalVarianzaXY += regresionLineal.varianzaXY
         }
-        println "Sumatoria VarianzaX^2 $totalVarianzaXX"
-        println "Sumatoria VarianzaXY $totalVarianzaXY"
+        log.debug "Sumatoria VarianzaX^2 $totalVarianzaXX"
+        log.debug "Sumatoria VarianzaXY $totalVarianzaXY"
         regresionB = totalVarianzaXY / totalVarianzaXX
         regresionA = promedioValoresC - (regresionB*promedioValoresB)
         regresionY = regresionA + (regresionB*valorNuevoB)

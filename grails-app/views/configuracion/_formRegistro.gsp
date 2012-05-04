@@ -30,7 +30,8 @@
         <td>
             <div class="fieldcontain">
                 <label for="valorK">
-                    Valor de K
+                    Valor de K / <g:message code="registro.valorC.label" default="${configuracion?.columnaC}"/>
+                    <span class="required-indicator">*</span>
                 </label>
                 <br>
                 <g:textField name="valorK" value="${valorK}"/>

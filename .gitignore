@@ -1,6 +1,6 @@
 # Código compilado #
 *.class
-
+*.data
 # Empaquetados #
 *.7z
 *.dmg

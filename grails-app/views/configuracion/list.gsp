@@ -32,6 +32,8 @@
                                 value="Regresión Lineal"/>
                 <g:actionSubmit name="vecinosCercanos" action="vecinosCercanos"
                                 value="Vecinos Cercanos"/>
+                <g:actionSubmit name="Inferencia Bayesiana" action="inferenciaBayesiana"
+                                value="Inferencia Bayesiana"/>
             </fieldset>
         </g:form>
 

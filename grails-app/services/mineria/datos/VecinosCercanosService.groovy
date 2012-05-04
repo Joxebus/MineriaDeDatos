@@ -1,6 +1,7 @@
 package mineria.datos
 
 import java.math.MathContext
+import mineria.datos.VecinosCercanosSeleccionados
 
 class VecinosCercanosService {
     BigDecimal valorRegistroB
@@ -26,23 +27,27 @@ class VecinosCercanosService {
 
     def evaluarClasificacion(Integer k){
         def listaClasificaciones = []
-        def clasificacionCorrespondiente
+        def clasificacionCorrespondiente = null
         VecinosCercanos.list([sort: "distancia", order: "asc"]).each { vecino ->
             if(k>0){
+                println "Clasificación: "+vecino.clasificacion
                 listaClasificaciones << vecino.clasificacion
-                new VecinosCercanosSeleccionados(clasificacion:vecino.clasificacion)
+                new VecinosCercanosSeleccionados(clasificacion:vecino.clasificacion).save(flush:true)
                 k--
             }
         }
 
+        println "***** Evaluando clasificación *****"
         listaClasificaciones.each{ clasificacion ->
+            println "Clasificacion "+clasificacion
             if(!clasificacionCorrespondiente){
+                println "Clasificación default "+ clasificacion
                 clasificacionCorrespondiente = clasificacion
-            }else if(VecinosCercanosSeleccionados.countByClasificacion(clasificacion) > VecinosCercanosSeleccionados.countByClasificacion(clasificacionCorrespondiente)){
+            }else if(VecinosCercanosSeleccionados.findAllWhere(clasificacion:clasificacion).size() > VecinosCercanosSeleccionados.findAllWhere(clasificacion:clasificacionCorrespondiente).size()){
                 clasificacionCorrespondiente = clasificacion
             }
         }
-
+        println "Clasificación correspondiente: "+clasificacionCorrespondiente
         return clasificacionCorrespondiente
     }
 

@@ -1,8 +1,8 @@
 dataSource {
     pooled = true
-    driverClassName = "com.mysql.jdbc.Driver" // "org.h2.Driver"
-    username = "root"
-    password = "root"
+    driverClassName = "org.h2.Driver" //"com.mysql.jdbc.Driver"
+    username = "sa"
+    password = ""
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -14,7 +14,7 @@ environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://localhost:3306/mineria"//"jdbc:h2:mem:devDb;MVCC=TRUE"
+            url = "jdbc:h2:mem:devDb;MVCC=TRUE" //"jdbc:mysql://localhost:3306/inventarios"
         }
     }
     test {
@@ -26,7 +26,7 @@ environments {
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/mineria"
+            url = "jdbc:mysql://localhost:3306/inventarios"
             pooled = true
             properties {
                maxActive = -1

@@ -8,6 +8,7 @@ class ConfiguracionController {
 
     def regresionLinealService
     def vecinosCercanosService
+    def bayesianaService
 
     def index() {
         if(!Configuracion.count())
@@ -115,7 +116,7 @@ class ConfiguracionController {
             def clasificacion = vecinosCercanosService.evaluarVecinosCercanos(new BigDecimal(params.valorNuevoB), new BigDecimal(valorNuevoC), params.valorK.toInteger())
             def registroNuevo = new Registro(
                     valorA:params.valorNuevoA,
-                    valorB:params.valorNuevoB,
+                    valorB:new BigDecimal(params.valorNuevoB),
                     valorC:valorNuevoC,
                     valorD:clasificacion
             )
@@ -128,16 +129,34 @@ class ConfiguracionController {
             flash.error = "Se debe ingresar un valor de K para calcular los vecinos cercanos"
             def registroNuevo = new Registro(
                     valorA:params.valorNuevoA,
-                    valorB:params.valorNuevoB
+                    valorB:new BigDecimal(params.valorNuevoB)
             )
             render (view:'list',model:[registroInstanceList: Registro.list(params), registroInstanceTotal: Registro.count(),
-                    configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo])
+                    configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo, valorK:params.valorK])
         }
+    }
+
+    def inferenciaBayesiana = {
+        bayesianaService.probabilidad()
+
+        def registroNuevo = new Registro(
+                valorA:params.valorNuevoA,
+                valorB:params.valorNuevoB,
+                valorC: params.valorK,
+                valorD:bayesianaService.inferenciaBayesiana(params.valorNuevoB, params.valorK)
+            )
+        flash.message = "Cálculo de valores por Inferencia Bayesiana"
+        clear()
+        render (view:'list',model:[registroInstanceList: Registro.list(params), registroInstanceTotal: Registro.count(),
+                    configuracion:Configuracion.list().get(0),registroNuevo:registroNuevo])
     }
 
     def clear(){
         RegresionLineal.list().each{ it.delete() }
         VecinosCercanos.list().each{ it.delete() }
         VecinosCercanosSeleccionados.list().each{ it.delete() }
+        Bayesiana.list().each{ it.delete() }
+        BayesianaTuplas.list().each{ it.delete() }
+        BayesianaResultados.list().each{ it.delete() }
     }
 }
